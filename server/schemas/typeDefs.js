@@ -1,17 +1,32 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+  type User {
+    _id: ID
+    username: String
+    email: String
+    password: String
+  }
+
+type Auth {
+       token: ID!
+       user: User
+     }
+
   type Query {
     getClassCard(playerClass: String): [Card]!
+    getDecks: [Deck]
+    getDeck(_id: String!): Deck
   }
   
   type Deck {
     _id: ID
     title: String
+    hero: String
     user: String
     cards: [Card]
   }
-
+  
   type Card {
     cardId: String
     dbfId: String
@@ -32,21 +47,18 @@ const typeDefs = gql`
     locale: String
     mechanics:[Mechanics]
   }
-
   type Mechanics {
     name: String
   }
 
-  input CardInput {
-    name: String,
-    img: String,
-  }
-
   type Mutation {
-    addDeck(
-      title: String!, 
-      cards: [CardInput]): [Deck]
+    addDeck(hero: String): Deck      
+    addCard(_id: String , name: String, img: String, rarity: String): Deck
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
   }
 `;
 
 module.exports = typeDefs;
+
+

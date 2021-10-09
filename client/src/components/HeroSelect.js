@@ -1,33 +1,30 @@
-//this is probably the stinkiest code ive ever written - isack
 import React from "react";
 import { useState } from "react";
+import { useMutation } from '@apollo/client'
 import CardDetail from "../components/CardDetail";
 import { Grid, GridRow } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-// import demonHunter from "../assets/demonHunter.png";
-// import druid from "../assets/druid.png";
-// import hunter from "../assets/hunter.png";
-// import mage from "../assets/mage.png";
-// import paladin from "../assets/paladin.png";
-// import priest from "../assets/priest.png";
-// import rouge from "../assets/rouge.png";
-// import shaman from "../assets/shaman.png";
-// import warlock from "../assets/warlock.png";
-// import warrior from "../assets/warrior.png";
+import {ADD_DECK} from '../utils/mutations'
+
 
 function HeroSelect(props) {
   const [playerClass, setPlayerClass] = useState("");
 
+  const [addDeck, {data}] = useMutation(ADD_DECK)
   const handleHeroSelect = (event) => {
     event.preventDefault();
-
-    // console.log(event.target.value);
+    
+    console.log('yoyo' + event.target.value);
     setPlayerClass(event.target.value);
+    
+    addDeck({ variables: { hero: (event.target.value) } })
+    
   };
-
+  
   const handleHeroClear = (event) => {
     event.preventDefault();
-
+    
+    
     // console.log(event.target.value);
     setPlayerClass("");
   };
@@ -78,7 +75,6 @@ function HeroSelect(props) {
   
   const heroButton = heros.map((hero) => 
     <button
-
       onClick={handleHeroSelect}
       key={hero.name}
       className="three wide column"
@@ -93,8 +89,16 @@ function HeroSelect(props) {
         marginTop:'25px',
         backgroundColor:"white"
       }}
-      
-    />
+    >
+      <h6
+        style={{
+          color: 'white',
+          position: 'relative',
+          top: 53,
+          left: 70
+        }}
+      >{hero.name}</h6>
+    </button>
   )
 
 
@@ -122,12 +126,13 @@ function HeroSelect(props) {
                 }}
                 name="playerClass"
                 onClick={handleHeroClear}
-                class="ui negative basic button"
+                className="ui negative basic button"
                 type="submit"
               >
                 Clear Selection
               </button>
               <CardDetail
+                deckdata={data}
                 playerClass={playerClass}
                 title="Some Feed for Thought(s)..."
               />
