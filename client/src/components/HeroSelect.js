@@ -1,3 +1,4 @@
+//this is probably the stinkiest code ive ever written - isack
 import React from "react";
 import { useState } from "react";
 import CardDetail from "../components/CardDetail";
